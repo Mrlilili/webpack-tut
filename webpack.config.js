@@ -1,16 +1,49 @@
 var path = require('path');
-var config = {
-    entry: path.resolve(__dirname, 'app/main.js'),
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+//定义了一些文件夹的路径
+var ROOT_PATH = path.resolve(__dirname);
+var APP_PATH = path.resolve(ROOT_PATH, 'app');
+var BUILD_PATH = path.resolve(ROOT_PATH, 'build');
+
+module.exports = {
+    //项目的文件夹 可以直接用文件夹名称 默认会找index.js 也可以确定是哪个文件名字
+    entry: APP_PATH,
+    //输出的文件名 合并以后的js会命名为bundle.js
     output: {
-        path: path.resolve(__dirname, 'build'),
+        path: BUILD_PATH,
         filename: 'bundle.js'
     },
+    //添加我们的插件 会自动生成一个html文件
+    plugins: [
+        new HtmlwebpackPlugin({
+            title: 'Hello World app'
+        })
+    ],
+    devServer: {
+        historyApiFallBack: true,
+        hot: true,
+        inline: true,
+        progress: true,
+    },
     module: {
-        loaders: [{
-            test: /\.jsx?$/, // 用正则来匹配文件路径，这段意思是匹配 js 或者 jsx
-            loader: 'babel' // 加载模块 "babel" 是 "babel-loader" 的缩写
-        }]
+        loaders: [
+            {
+                test: /\.scss$/,
+                loaders: ['style', 'css', 'sass'],
+                include: APP_PATH
+            },
+            {
+                test: /\.(png|jpg)$/,
+                loader: 'url?limit'
+            },
+            {
+                test: /\.jsx?$/,
+                loader: 'babel',
+                include: APP_PATH,
+                query: {
+                    presets: ['es2015']
+                }
+            }
+        ]
     }
 };
-
-module.exports = config;
