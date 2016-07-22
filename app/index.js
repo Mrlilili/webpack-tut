@@ -3,6 +3,7 @@
  * Reference link：https://zhuanlan.zhihu.com/p/20367175
  * Reference link：https://zhuanlan.zhihu.com/p/20397902
  */
+require('jquery')
 import './main.scss';
 import generateText from './sub';
 import $ from 'jquery';
